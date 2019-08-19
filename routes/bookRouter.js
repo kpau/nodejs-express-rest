@@ -25,14 +25,62 @@ function routes(Book) {
       res.status(201).json(book._id);
     });
 
+  bookRouter.use('/books/:bookId', (req, res, next) => {
+    Book.findById(res.params.bookId, (err, book) => {
+      if (err) {
+        return res.send(err);
+      }
+
+      if (book) {
+        req.book = book;
+        return next();
+      }
+
+      return res.sendStatus(404);
+    });
+  });
+
   bookRouter.route('/books/:bookId')
-    .get((req, res) => {
-      Book.findById(res.params.bookId, (err, books) => {
+    .get((req, res) => res.json(req.book))
+    .pub((req, res) => {
+      const { book } = req;
+
+      book.title = req.body.title;
+      book.author = req.body.author;
+      book.genre = req.body.genre;
+      book.read = req.body.read;
+
+      book.save((err) => {
         if (err) {
           return res.send(err);
         }
+        return res.json(book);
+      });
+    })
+    .patch((req, res) => {
+      const { book } = req;
 
-        return res.json(books);
+      if (req.body._id) {
+        delete req.body._id;
+      }
+
+      Object.entries(req.body).forEach(([key, value]) => {
+        book[key] = value;
+      });
+
+      book.save((err) => {
+        if (err) {
+          return res.send(err);
+        }
+        return res.json(book);
+      });
+    })
+    .delete((req, res) => {
+      req.book.remove((err) => {
+        if (err) {
+          return res.send(err);
+        }
+        return res.sendStatus(204);
       });
     });
 
