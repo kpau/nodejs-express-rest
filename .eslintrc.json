@@ -15,6 +15,7 @@
         "ecmaVersion": 2018
     },
     "rules": {
-      "object-curly-newline": "off"
+      "object-curly-newline": "off",
+      "no-underscore-dangle": "off"
     }
 }
