@@ -9,7 +9,16 @@ function booksController(Book) {
         return res.send(err);
       }
 
-      return res.json(books);
+      const result = books.map((book) => {
+        const newBook = book.toJSON();
+
+        newBook.links = {};
+        newBook.links.self = `http://${req.headers.host}/api/books/${book._id}`;
+
+        return newBook;
+      });
+
+      return res.json(result);
     });
   }
 
