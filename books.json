@@ -1,0 +1,11 @@
+[{
+  "title": "War and Peace",
+  "genre": "Historical Finciton",
+  "author": "Lev Nikolayevich Tolstoy",
+  "read": false
+}, {
+  "title": "Les Miserables",
+  "genre": "Historical Finciton",
+  "author": "Victor Hugo",
+  "read": false
+}]
